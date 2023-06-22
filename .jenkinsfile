@@ -22,7 +22,7 @@ stage('Test')
 {
 steps
 {
-bat "mvn test -PSanity"
+command "mvn test -PSanity"
 }
 }
 stage('Release')
