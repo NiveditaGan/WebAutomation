@@ -1,0 +1,41 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: build
+    displayName: "this is build stage"
+    jobs:
+      - job: jobA
+  - stage: deployToQA
+    displayName: "this is deploy to QA stage"
+    dependsOn: build
+    jobs:
+      - job: jobB
+        timeoutInMinutes: 5
+        continueOnError: true
+        displayName: "This is job Demo"
+  - stage: testing
+    displayName: "This is Testing script Run in VM"
+    dependsOn: deploytoQA
+    jobs:
+      - job: jobC
+        displayName: "Job to run test Scripts"
+        steps:
+          - task: Maven@3
+            inputs:
+              mavenPomFile: 'pom.xml'
+              goals: 'clean'
+              publishJUnitResults: false
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: false
